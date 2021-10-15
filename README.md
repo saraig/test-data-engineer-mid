@@ -41,6 +41,8 @@ Debe realizar un fork de este repositorio para desarrollar y entregar su trabajo
 
 3. Realizar una consulta donde se obtenga por año, clave y nombre de sitio la mediana de cualquier medicion quimica. Cuando no se tiene nombre del sitio debera ponerse el texto 'Nombre no disponible'.
 
+**Nota**: Para la generacion de las consultas, se pueden crear las estructuras y cargar los datos de los archivos **create.sql** e **insert.sql** a cualquier servidor SQL que se tenga acceso. En caso de no contar con algún servidor cada archivo de excel representarian una tabla(**sitios.csv** e **muestras.csv**) y son una referencia de las estructuras/valores a considerar para la consulta.
+
 Los ejercicios pueden realizarse en el equipo local y/o servidor al que el aspirante tenga acceso, debe generarse un documento donde se contesten las preguntas y se muestren los resultados de las transformaciones. En caso de trabajar con notebooks de jupyter puede exportarse en HTML/PDF. En caso de crear scripts de SQL deben agregarse también en el repositorio. 
 
 Una vez concluido el reto se debe comunicar al correo correspondiente con la liga al repositorio de github final para evaluar las respuestas.
