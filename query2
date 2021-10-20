@@ -1,0 +1,16 @@
+SELECT *
+FROM(
+SELECT  MU.[clave_sitio]
+		,CASE
+            WHEN DS.[nombre_sitio] IS NOT NULL THEN DS.[nombre_sitio]
+            ELSE 'Nombre no disponible' END as [nombre_sitio]
+		,MU.[clave_monitoreo]
+        ,MU.[anio]
+        ,AVG(MU.[n_no2]) as av_n_no2
+FROM muestras AS MU
+LEFT JOIN sitios AS DS
+    ON MU.[clave_sitio] = DS.[clave_sitio]
+WHERE MU.[anio]= 2019
+GROUP BY MU.[clave_sitio] ,MU.[clave_monitoreo]
+        ,MU.[anio] )
+WHERE av_n_no2> 1

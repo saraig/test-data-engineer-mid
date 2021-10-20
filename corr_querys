@@ -1,0 +1,86 @@
+--Como la columna de nombre_sitio no està vacìa, el query no arrojarà ningùn resultado
+-----------------------
+--Query 1:
+
+SELECT  MU.[clave_sitio]
+        ,CASE
+            WHEN DS.[nombre_sitio] IS NOT NULL THEN DS.[nombre_sitio]
+            ELSE 'Nombre no disponible'
+        END as [nombre_sitio]
+        ,MU.[clave_monitoreo]
+        ,MU.[fecha_realizacion]
+        ,MU.[anio]
+        ,MU.[co3]
+        ,MU.[hco3]
+        ,MU.[oh]
+        ,MU.[cot]
+        ,MU.[cot_sol]
+        ,MU.[n_nh3]
+        ,MU.[n_no2]  
+FROM [TMP].[dbo].[muestras] AS MU
+LEFT JOIN [TMP].[dbo].[sitios] AS DS
+    ON MU.[clave_sitio] = DS.[clave_sitio]
+WHERE [nombre_sitio] like '%Nombre no disponible%'
+
+-------------------------------
+--NOTA Query 1:
+--no tiene nada de malo est query, solo que como no hay nulos, arroja 0 registros, lo comprobè con el siguiente query:
+
+SELECT * FROM sitios WHERE nombre_sitio IS NULL
+
+------------------------
+--Query 1.1:
+
+SELECT *
+FROM(
+SELECT  MU.[clave_sitio]
+		,CASE
+            WHEN DS.[nombre_sitio] IS NOT NULL THEN DS.[nombre_sitio]
+            ELSE 'Nombre no disponible' END as [nombre_sitio]
+		,MU.[clave_monitoreo]
+        ,MU.[fecha_realizacion]
+        ,MU.[anio]
+        ,MU.[co3]
+        ,MU.[hco3]
+        ,AVG(MU.[cot])
+		,AVG(MU.[cot])
+        ,AVG(MU.[cot_sol])
+        ,AVG(MU.[n_nh3])
+        ,AVG(MU.[n_no2]) as av_n_no2
+FROM muestras AS MU
+LEFT JOIN sitios AS DS
+    ON MU.[clave_sitio] = DS.[clave_sitio]
+WHERE MU.[anio]= 2019
+GROUP BY MU.[clave_sitio] ,MU.[clave_monitoreo]
+        ,MU.[fecha_realizacion]
+        ,MU.[anio]
+        ,MU.[co3]
+        ,MU.[hco3])
+WHERE av_n_no2>0.5
+
+---------------------------
+
+--Query 2: 
+
+SELECT *
+FROM(
+SELECT  MU.[clave_sitio]
+		,CASE
+            WHEN DS.[nombre_sitio] IS NOT NULL THEN DS.[nombre_sitio]
+            ELSE 'Nombre no disponible' END as [nombre_sitio]
+		,MU.[clave_monitoreo]
+        ,MU.[anio]
+        ,AVG(MU.[n_no2]) as av_n_no2
+FROM muestras AS MU
+LEFT JOIN sitios AS DS
+    ON MU.[clave_sitio] = DS.[clave_sitio]
+WHERE MU.[anio]= 2019
+GROUP BY MU.[clave_sitio] ,MU.[clave_monitoreo]
+        ,MU.[anio] )
+WHERE av_n_no2> 1
+
+/*
+NOTAAAA:
+lo primero es que el query no tenìas group by, por lo que marcaba error, luego, para el filtro del promedio no podìa solo hacer el promedio del avg, primero tengo que hacer la consulta para sacar el avg y luego hacer el filtro. */
+
+---Query 3
